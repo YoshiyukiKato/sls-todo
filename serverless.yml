@@ -1,0 +1,88 @@
+service: sls-todos
+
+# 実行環境に関する設定
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: ap-northeast-1
+  role: ${DYNAMO_ACCESS_ROLE} # dynamoにアクセス可能なロール。環境変数に入っている想定
+
+# 利用するプラグインについて
+plugins:
+  - serverless-offline
+  - serverless-dynamodb-local
+  - serverless-plugin-include-dependencies
+
+# デプロイ時のパッケージの内容について
+package:
+  include:
+    - src/**
+
+# lambdaを実行するトリガの設定。今回はAPI Gatewayのルーティング設定
+functions:
+  sls-todo:
+    handler: src/routes/index.handler
+    events:
+      - http:
+          path: /todos
+          method: get
+          cors: true
+      - http:
+          path: /todo
+          method: post
+          cors: true
+      - http:
+          path: /todo/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+      - http:
+          path: /todo/{id}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+      - http:
+          path: /todo/{id}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+
+# ローカルのdynamodbの起動設定
+custom:
+  dynamodb:
+    start:
+      port: 8888
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      test:
+        sources:
+          - table: sls-todos
+            sources: [./seeds/todo-items.json]
+
+# CloudFormationの形式でのリソース定義
+resources:
+  Resources:
+    slsTodos:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: sls-todos
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

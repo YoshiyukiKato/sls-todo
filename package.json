@@ -1,0 +1,29 @@
+{
+  "name": "sls-todo",
+  "version": "1.0.0",
+  "description": "sls todo sample",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "severless",
+    "express"
+  ],
+  "author": "Yoshiyuki Kato",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.163.0",
+    "aws-serverless-express": "^3.0.2",
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "cors": "^2.8.4",
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "serverless": "^1.24.1",
+    "serverless-dynamodb-local": "^0.2.26",
+    "serverless-offline": "^3.16.0",
+    "serverless-plugin-include-dependencies": "^3.0.0"
+  }
+}
