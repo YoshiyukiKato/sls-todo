@@ -7,6 +7,7 @@ Sample of Serverless Framework + Express.
 
 ```
 $ npm install -g serverless
+$ sls login
 ```
 
 ## usage
@@ -19,7 +20,7 @@ $ cd sls-todo && npm install
 
 ```
 $ sls dynamodb install
-$ sls dynamo start
+$ sls dynamodb start
 ```
 
 And then, run in local.
